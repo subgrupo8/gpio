@@ -132,6 +132,15 @@ void AcenderLEDsAzul(){
     sleep_ms(1000);
 }
 
+void AcenderLEDsVermelho() {
+    npClear();
+    for (int i = 0; i < LED_COUNT; i++) {
+        npSetLED(i, 204, 0, 0);
+    }
+    npWrite();
+}
+
+
 void AnimacaoLosango(){ 
     // Animação para losango pequeno
     npClear();
@@ -284,7 +293,7 @@ int main() {
                     break;
                 case '3':
                     
-                    strcpy(AcaoRealizada, "");
+                    strcpy(AcaoRealizada, "Animação rosto RGB");
                     break;
                 case '4':
                     
@@ -323,7 +332,7 @@ int main() {
                     strcpy(AcaoRealizada, "Acender LEDs em AZUL (100%%)");
                     break;
                 case 'C':                    
-                    
+                    AcenderLEDsVermelho();
                     strcpy(AcaoRealizada, "Acender LEDs em VERMELHO (80%%).");
                     break;
                 case 'D':

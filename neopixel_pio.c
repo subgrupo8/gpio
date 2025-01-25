@@ -4,7 +4,7 @@
  * Tarefa: AS_U4C2O1234A_20_01_2025 - V1
  * Residentes: 
  *  - Lucas Meira de Souza Leite
- *  -  
+ *  - Maria Clara Simões de Jesus
  *  -  
  *  -  
  *  -   
@@ -184,6 +184,44 @@ void AnimacaoLosango(){
     sleep_ms(1000);
 }
 
+void AnimacaoSeta() {
+    // LEDs que compõem a seta na matriz 5x5
+    const uint8_t seta_leds[] = {2, 6, 7, 8, 12, 17, 22};
+    const int SETA_LEDS = sizeof(seta_leds) / sizeof(seta_leds[0]);
+
+    // Iluminação progressiva (efeito de expansão)
+    for (int step = 0; step < SETA_LEDS; ++step) {
+        npClear();
+        for (int i = 0; i <= step; ++i) {
+            npSetLED(seta_leds[i], 0, 255, 0); // Cor verde
+        }
+        npWrite();
+        sleep_ms(300); // Pausa entre os passos
+    }
+
+    // Efeito pulsante (após expansão completa)
+    for (int cycle = 0; cycle < 3; ++cycle) {
+        npClear();
+        for (int i = 0; i < SETA_LEDS; ++i) {
+            npSetLED(seta_leds[i], 255, 255, 0); // Cor amarela
+        }
+        npWrite();
+        sleep_ms(500);
+
+        npClear();
+        for (int i = 0; i < SETA_LEDS; ++i) {
+            npSetLED(seta_leds[i], 0, 255, 255); // Cor ciano
+        }
+        npWrite();
+        sleep_ms(500);
+    }
+    npClear();
+    npWrite();
+
+}
+
+
+
 void setup() {
     for (int i = 0; i < ROWS; i++) {
         gpio_init(rows_pins[i]);
@@ -213,6 +251,12 @@ char read_keypad() {
     }
     return '\0';
 }
+
+void ApagarTodosLEDs() {
+    npClear();
+    npWrite();
+}
+
 
 int main() {
     stdio_init_all();
@@ -255,8 +299,8 @@ int main() {
                     strcpy(AcaoRealizada, "");
                     break;
                 case '7':
-                    
-                    strcpy(AcaoRealizada, "");
+                    AnimacaoSeta();
+                    strcpy(AcaoRealizada, "Animação seta RGB.");
                     break;
 
                 case '8':
@@ -270,6 +314,7 @@ int main() {
                     break;
                 case 'A':
                     
+                    ApagarTodosLEDs();
                     strcpy(AcaoRealizada, "Apagar LEDS.");
                     break;
                 case 'B':

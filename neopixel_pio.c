@@ -5,7 +5,7 @@
  * Residentes: 
  *  - Lucas Meira de Souza Leite
  *  - Maria Clara Simões de Jesus
- *  -  
+ *  - Hugo Martins Santana
  *  -  
  *  -   
  *  -   
@@ -127,6 +127,15 @@ void AcenderLEDsAzul(){
     npClear();
     for (int i = 0; i <= 24; ++i){
         npSetLED(i, 0, 0, 255);
+    }
+    npWrite();
+    sleep_ms(1000);
+}
+
+void AcenderLEDsBranco(){
+    npClear();
+    for (int i = 0; i <= 24; ++i){
+        npSetLED(i, 51, 51, 51);
     }
     npWrite();
     sleep_ms(1000);
@@ -272,7 +281,7 @@ int main() {
             switch (key) {
                 case '0':
                     
-                    strcpy(AcaoRealizada, "");
+                    strcpy(AcaoRealizada, "Animação 'Oi'");
                     break;
                 case '1':
                     
@@ -331,7 +340,7 @@ int main() {
                     strcpy(AcaoRealizada, "Acender LEDS em VERDE (50%%).");
                     break;
                 case '#':
-                    
+                    AcenderLEDsBranco();
                     strcpy(AcaoRealizada, "Acionar LEDS em BRANCO (20%%).");                    
                     break;                
             }

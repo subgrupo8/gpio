@@ -28,7 +28,7 @@
 // Biblioteca gerada pelo arquivo .pio durante compilação.
 #include "ws2818b.pio.h"
 
-
+#define buz 20 //Buzzer
 #define ROWS 4 //Definição do número de linhas do teclado
 #define COLS 4 //Definição do numero de colunas do teclado
 #define LOSANGO_G 13 //Definição do numero de leds p/ formar o losango grande
@@ -110,6 +110,22 @@ void npClear() {
     npSetLED(i, 0, 0, 0);
 }
 
+void buzz() { // Configuração do buzzer
+    gpio_init(20);
+    gpio_set_dir(20, GPIO_OUT);
+    gpio_put(20, 0);
+}
+void note(uint8_t buzzer, uint16_t notefreq, uint16_t duration_ms){
+    int halfc = 1000000 / (2 * notefreq); // Calcula o tempo de espera para cada meio ciclo de onda
+    int cycles = (notefreq * duration_ms) / 1000; // Número total de ciclos necessários para a duração
+
+    for (uint8_t i = 0; i < cycles; i++) {
+        gpio_put(20, 1);  // Muda o estado para HIGH iniciando 1º parte do ciclo
+        sleep_us(halfc); // Aguarda metade do tempo de um ciclo (meio período)
+        gpio_put(20, 0);  // Muda o estado para LOW  iniciando 2º parte do ciclo
+        sleep_us(halfc); // Aguarda a outra metade do tempo (meio período)
+    }
+}
 /**
  * Escreve os dados do buffer nos LEDs.
  */
@@ -193,6 +209,71 @@ void AnimacaoLosango(){
     sleep_ms(1000);
 }
 
+void AnimacaoOi() {
+    // Definição do LED para "O"
+    const uint8_t O_leds[] = {6, 7, 8, 11, 13, 16, 17, 18};
+    const int O_count = sizeof(O_leds) / sizeof(O_leds[0]);
+
+    // Definição do LED para "I"
+    const uint8_t I_leds[] = {7, 12, 17};
+    const int I_count = sizeof(I_leds) / sizeof(I_leds[0]);
+
+    // Animação para o "O" vindo da esquerda
+    for (int step = 0; step < O_count; ++step) {
+        npClear();
+        for (int i = 0; i <= step; ++i) {
+            npSetLED(O_leds[i], 255, 0, 255); // Cor verde
+        }
+        npWrite();
+        sleep_ms(200);
+    }
+
+    // Piscar o "O" com som grave
+    for (int cycle = 0; cycle < 2; ++cycle) {
+        npClear();
+        npWrite();
+        note(buz, 300, 200); // Som grave para o "O"
+        sleep_ms(200);
+
+        for (int i = 0; i < O_count; ++i) {
+            npSetLED(O_leds[i], 255, 0, 255); // Cor verde
+        }
+        npWrite();
+        sleep_ms(200);
+    }
+
+    sleep_ms(1000); // Pausa entre "O" e "I"
+
+    // Animação para o "I" vindo da direita
+    for (int step = I_count - 1; step >= 0; --step) {
+        npClear();
+        for (int i = step; i < I_count; ++i) {
+            npSetLED(I_leds[i], 255, 165, 0); // Cor vermelha
+        }
+        npWrite();
+        sleep_ms(200);
+    }
+
+    // Piscar o "I" com som agudo
+    for (int cycle = 0; cycle < 2; ++cycle) {
+        npClear();
+        npWrite();
+        note(buz, 880, 200); // Som agudo para o "I"
+        sleep_ms(200);
+
+        for (int i = 0; i < I_count; ++i) {
+            npSetLED(I_leds[i], 255, 165, 0); // Cor vermelha
+        }
+        npWrite();
+        sleep_ms(200);
+    }
+
+    sleep_ms(1000); // Pausa final antes de terminar a animação
+
+    npClear();
+    npWrite();
+}
+
 void AnimacaoSeta() {
     // LEDs que compõem a seta na matriz 5x5
     const uint8_t seta_leds[] = {2, 6, 7, 8, 12, 17, 22};
@@ -270,6 +351,7 @@ void ApagarTodosLEDs() {
 int main() {
     stdio_init_all();
     setup();     
+    buzz();
 
     // Inicializa matriz de LEDs NeoPixel.
     npInit(LED_PIN);
@@ -280,7 +362,7 @@ int main() {
         if (key != '\0') {
             switch (key) {
                 case '0':
-                    
+                    AnimacaoOi();
                     strcpy(AcaoRealizada, "Animação 'Oi'");
                     break;
                 case '1':

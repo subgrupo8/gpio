@@ -6,7 +6,7 @@
  *  - Lucas Meira de Souza Leite
  *  - Maria Clara Simões de Jesus
  *  - Hugo Martins Santana
- *  -  
+ *  - Allef Silva Imbassahy
  *  -   
  *  -   
  *  -   
@@ -148,6 +148,15 @@ void AcenderLEDsAzul(){
     sleep_ms(1000);
 }
 
+void AcenderLEDsVerde() {
+    npClear();
+    for (int i = 0; i <= 24; ++i){
+        npSetLED(i, 0, 127, 0);
+    }
+    npWrite();
+    sleep_ms(1000);
+}
+
 void AcenderLEDsBranco(){
     npClear();
     for (int i = 0; i <= 24; ++i){
@@ -207,6 +216,52 @@ void AnimacaoLosango(){
     npWrite();
 
     sleep_ms(1000);
+}
+
+void AnimacaoQuadrado() {
+    // Definição dos LEDs para o quadrado maior e menor
+    const uint8_t quadrado_maior[] = {0, 1, 2, 3, 4, 5, 9, 10, 14, 15, 19, 20, 21, 22, 23, 24};
+    const int TAM_QUADRADO_MAIOR = sizeof(quadrado_maior) / sizeof(quadrado_maior[0]);
+
+    const uint8_t quadrado_menor[] = {6, 7, 8, 11, 13, 16, 17, 18};
+    const int TAM_QUADRADO_MENOR = sizeof(quadrado_menor) / sizeof(quadrado_menor[0]);
+
+    // Acender o quadrado maior
+    npClear();
+    for (int i = 0; i < TAM_QUADRADO_MAIOR; ++i) {
+        npSetLED(quadrado_maior[i], 0, 0, 255); // Cor azul
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    // Transição gradual para o quadrado menor
+    for (int passo = 0; passo <= 3; ++passo) {
+        npClear();
+
+        // Apagar LEDs do quadrado maior gradualmente
+        for (int i = 0; i < TAM_QUADRADO_MAIOR - (passo * 4); ++i) {
+            npSetLED(quadrado_maior[i], 0, 0, 255);
+        }
+
+        // Acender LEDs do quadrado menor gradualmente
+        for (int i = 0; i < passo * 2 && i < TAM_QUADRADO_MENOR; ++i) {
+            npSetLED(quadrado_menor[i], 255, 0, 0); // Cor vermelha
+        }
+
+        npWrite();
+        sleep_ms(300);
+    }
+
+    // Manter o quadrado menor aceso por 1 segundo
+    npClear();
+    for (int i = 0; i < TAM_QUADRADO_MENOR; ++i) {
+        npSetLED(quadrado_menor[i], 255, 0, 0); // Cor vermelha
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    npClear();
+    npWrite();
 }
 
 void AnimacaoOi() {
@@ -370,8 +425,8 @@ int main() {
                     strcpy(AcaoRealizada, "");
                     break;
                 case '2':
-                    
-                    strcpy(AcaoRealizada, "");
+                    AnimacaoQuadrado();
+                    strcpy(AcaoRealizada, "Animação Quadrado");
                     break;
                 case '3':
                     
@@ -418,7 +473,7 @@ int main() {
                     strcpy(AcaoRealizada, "Acender LEDs em VERMELHO (80%%).");
                     break;
                 case 'D':
-                                        
+                    AcenderLEDsVerde();                    
                     strcpy(AcaoRealizada, "Acender LEDS em VERDE (50%%).");
                     break;
                 case '#':

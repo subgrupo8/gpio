@@ -5,7 +5,7 @@
  * Residentes: 
  *  - Lucas Meira de Souza Leite
  *  - Maria Clara Simões de Jesus
- *  -  
+ *  - Cauã Gomes Fraga
  *  -  
  *  -   
  *  -   

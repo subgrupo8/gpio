@@ -8,7 +8,7 @@
  *  - Cauã Gomes Fraga
  *  - Hugo Martins Santana
  *  - Allef Silva Imbassahy
- *  -   
+ *  - Josemar Rocha Pedroso  
  *  -   
  *  -   
  *  -    
@@ -375,6 +375,99 @@ void AnimacaoSeta() {
 
 }
 
+
+// Animação cascata para botão 1
+void AnimacaoCascata() {
+    // Anima LEDs de 0 a 9 em sequência
+    for (int cycle = 0; cycle < 3; cycle++) {
+        // Cascata descendo (vermelho)
+        for (int i = 0; i <= 9; i++) {
+            npClear();
+            npSetLED(i, 255, 0, 0);
+            npWrite();
+            sleep_ms(200);
+        }
+        
+        // Cascata subindo (azul)
+        for (int i = 9; i >= 0; i--) {
+            npClear();
+            npSetLED(i, 0, 0, 255);
+            npWrite();
+            sleep_ms(200);
+        }
+    }
+    npClear();
+    npWrite();
+}
+
+// Animação onda para botão 4
+void AnimacaoOnda() {
+    const uint8_t cores[3][3] = {
+        {255, 0, 0},    // Vermelho
+        {0, 255, 0},    // Verde
+        {0, 0, 255}     // Azul
+    };
+    
+    for (int wave = 0; wave < 3; wave++) {
+        // Onda se expandindo do centro
+        for (int i = 0; i <= 4; i++) {
+            npClear();
+            if (4 - i >= 0) npSetLED(4 - i, cores[wave][0], cores[wave][1], cores[wave][2]);
+            if (4 + i <= 9) npSetLED(4 + i, cores[wave][0], cores[wave][1], cores[wave][2]);
+            npWrite();
+            sleep_ms(150);
+        }
+        
+        // Onda se contraindo para o centro
+        for (int i = 4; i >= 0; i--) {
+            npClear();
+            if (4 - i >= 0) npSetLED(4 - i, cores[wave][0], cores[wave][1], cores[wave][2]);
+            if (4 + i <= 9) npSetLED(4 + i, cores[wave][0], cores[wave][1], cores[wave][2]);
+            npWrite();
+            sleep_ms(150);
+        }
+    }
+    npClear();
+    npWrite();
+}
+
+// Animação pisca-pisca para botão 5
+void AnimacaoPiscaPisca() {
+    // Define padrões de LEDs pares e ímpares
+    for (int cycle = 0; cycle < 5; cycle++) {
+        // Acende LEDs pares em verde
+        npClear();
+        for (int i = 0; i <= 9; i += 2) {
+            npSetLED(i, 0, 255, 0);
+        }
+        npWrite();
+        sleep_ms(500);
+        
+        // Acende LEDs ímpares em roxo
+        npClear();
+        for (int i = 1; i <= 9; i += 2) {
+            npSetLED(i, 255, 0, 255);
+        }
+        npWrite();
+        sleep_ms(500);
+    }
+    
+    // Finaliza com todos os LEDs piscando juntos
+    for (int i = 0; i < 3; i++) {
+        npClear();
+        for (int led = 0; led <= 9; led++) {
+            npSetLED(led, 255, 255, 0); // Amarelo
+        }
+        npWrite();
+        sleep_ms(300);
+        
+        npClear();
+        npWrite();
+        sleep_ms(300);
+    }
+}
+
+
 void AnimacaoRosto() {
     // Arrays que definem os LEDs para cada parte do rosto
     const uint8_t rosto_piscando[] = {1, 2, 3, 5, 9, 16, 18};
@@ -522,8 +615,8 @@ int main() {
                     strcpy(AcaoRealizada, "Animação 'Oi'");
                     break;
                 case '1':
-                    
-                    strcpy(AcaoRealizada, "");
+                    AnimacaoCascata();
+                    strcpy(AcaoRealizada, "Animação Cascata");
                     break;
                 case '2':
                     AnimacaoQuadrado();
@@ -534,12 +627,12 @@ int main() {
                     strcpy(AcaoRealizada, "Animação rosto RGB");
                     break;
                 case '4':
-                    
-                    strcpy(AcaoRealizada, "");
+                    AnimacaoOnda();
+                    strcpy(AcaoRealizada, "Animação Onda");
                     break;
                 case '5':
-                    
-                    strcpy(AcaoRealizada, "");
+                    AnimacaoPiscaPisca();
+                    strcpy(AcaoRealizada, "Animação Pisca-Pisca");
                     break;
                 case '6':
                     

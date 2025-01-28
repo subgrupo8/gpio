@@ -5,6 +5,7 @@
  * Residentes: 
  *  - Lucas Meira de Souza Leite
  *  - Maria Clara Simões de Jesus
+ *  - Cauã Gomes Fraga
  *  - Hugo Martins Santana
  *  - Allef Silva Imbassahy
  *  -   
@@ -146,6 +147,15 @@ void AcenderLEDsAzul(){
     }
     npWrite();
     sleep_ms(1000);
+}
+
+
+void AcenderLEDsVermelho() {
+    npClear();
+    for (int i = 0; i < LED_COUNT; i++) {
+        npSetLED(i, 204, 0, 0);
+    }
+    npWrite();
 }
 
 void AcenderLEDsVerde() {
@@ -365,6 +375,97 @@ void AnimacaoSeta() {
 
 }
 
+void AnimacaoRosto() {
+    // Arrays que definem os LEDs para cada parte do rosto
+    const uint8_t rosto_piscando[] = {1, 2, 3, 5, 9, 16, 18};
+    const uint8_t olhos[] = {16, 18};
+    const uint8_t boca_feliz[] = {1, 2, 3, 5, 9};
+    const uint8_t boca_neutra[] = {6, 7, 8};
+    const uint8_t rosto_triste[] = {0, 4, 6, 7, 8, 15, 19, 21, 23};
+    const uint8_t rosto_raivoso[] = {0, 4, 6, 7, 8, 20, 21, 23, 24};
+
+    const int ROSTO_PISCANDO = sizeof(rosto_piscando) / sizeof(rosto_piscando[0]);
+    const int OLHOS = sizeof(olhos) / sizeof(olhos[0]);
+    const int BOCA_FELIZ = sizeof(boca_feliz) / sizeof(boca_feliz[0]);
+    const int BOCA_NEUTRA = sizeof(boca_neutra) / sizeof(boca_neutra[0]);
+    const int ROSTO_TRISTE = sizeof(rosto_triste) / sizeof(rosto_triste[0]);
+    const int ROSTO_RAIVOSO = sizeof(rosto_raivoso) / sizeof(rosto_raivoso[0]);
+
+    // Frame 1: Rosto Feliz
+    npClear();
+    for (int i = 0; i < BOCA_FELIZ; i++) {
+        npSetLED(boca_feliz[i], 0, 0, 255); 
+    }
+    for (int i = 0; i < OLHOS; i++) {
+        npSetLED(olhos[i], 0, 255, 0); 
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    // Frame 2: Piscando
+    npClear();
+    for (int i = 0; i < ROSTO_PISCANDO; i++) {
+        npSetLED(rosto_piscando[i], 0, 0, 255);
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    // Frame 3: Rosto Feliz
+    npClear();
+    for (int i = 0; i < BOCA_FELIZ; i++) {
+        npSetLED(boca_feliz[i], 0, 0, 255); 
+    }
+    for (int i = 0; i < OLHOS; i++) {
+        npSetLED(olhos[i], 0, 255, 0); 
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    // Frame 4: Rosto Nêutro
+    npClear();
+    for (int i = 0; i < OLHOS; i++){
+        npSetLED(olhos[i], 0, 255, 0);
+    }
+    for (int i = 0; i < BOCA_NEUTRA; i++ ){
+        npSetLED(boca_neutra[i], 0, 0, 255);
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    // Frame 5: Rosto Triste
+    npClear();
+    for (int i = 0; i < ROSTO_TRISTE; i++) {
+        npSetLED(rosto_triste[i], 0, 0, 255); 
+    }
+    for (int i = 0; i < OLHOS; i++) {
+        npSetLED(olhos[i], 0, 255, 0);
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    // Frame 6: Rosto Nêutro
+    npClear();
+    for (int i = 0; i < OLHOS; i++){
+        npSetLED(olhos[i], 0, 255, 0);
+    }
+    for (int i = 0; i < BOCA_NEUTRA; i++ ){
+        npSetLED(boca_neutra[i], 0, 0, 255);
+    }
+    npWrite();
+    sleep_ms(1000);
+
+    // Frame 7: Rosto Raivoso (olhos vermelhos)
+    npClear();
+    for (int i = 0; i < ROSTO_RAIVOSO; i++) {
+        npSetLED(rosto_raivoso[i], 0, 0, 255); 
+    }
+    for (int i = 0; i < OLHOS; i++) {
+        npSetLED(olhos[i], 255, 0, 0); 
+    }
+    npWrite();
+    
+}
+
 
 
 void setup() {
@@ -429,8 +530,8 @@ int main() {
                     strcpy(AcaoRealizada, "Animação Quadrado");
                     break;
                 case '3':
-                    
-                    strcpy(AcaoRealizada, "");
+                    AnimacaoRosto();
+                    strcpy(AcaoRealizada, "Animação rosto RGB");
                     break;
                 case '4':
                     
@@ -469,7 +570,7 @@ int main() {
                     strcpy(AcaoRealizada, "Acender LEDs em AZUL (100%%)");
                     break;
                 case 'C':                    
-                    
+                    AcenderLEDsVermelho();
                     strcpy(AcaoRealizada, "Acender LEDs em VERMELHO (80%%).");
                     break;
                 case 'D':

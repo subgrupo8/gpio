@@ -93,6 +93,8 @@ Este projeto foi desenvolvido colaborativamente pelos residentes do programa **E
 - Hugo Martins Santana
 - Allef Silva Imbassahy
 - Josemar Rocha Pedroso
+  
+Link do vídeo: https://youtu.be/4HK-OcZhJcg
 
 ## Licença
 Este projeto é disponibilizado sob a licença MIT. Consulte o arquivo `LICENSE` para mais informações.
